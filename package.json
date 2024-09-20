@@ -16,10 +16,16 @@
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
-    "commands": [
+    "customEditors": [
       {
-        "command": "jsonArrayTableEditor.helloWorld",
-        "title": "Hello World"
+        "viewType": "jsonArrayTableEditor.jsonArrayTableEditor",
+        "displayName": "JSON Array Table Editor",
+        "selector": [
+          {
+            "filenamePattern": "*.d.json"
+          }
+        ],
+        "priority": "default"
       }
     ]
   },
