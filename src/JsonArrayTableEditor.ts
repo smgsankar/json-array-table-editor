@@ -26,23 +26,37 @@ export class JsonArrayTableEditor implements vscode.CustomTextEditorProvider {
     webviewPanel.webview.html = this.getHtmlForWebview(webviewPanel.webview);
 
     webviewPanel.webview.onDidReceiveMessage(
-      (message) => {
-        vscode.window.showErrorMessage(
-          message.text
-        );
-      },
+      this.handleMessage,
       undefined,
       this.context.subscriptions
     );
 
     function updateWebview() {
       webviewPanel.webview.postMessage({
-        type: "update",
+        type: "init",
         text: document.getText(),
       });
     }
 
+    vscode.workspace.onDidChangeTextDocument((e) => {
+      if (e.document.uri.toString() === document.uri.toString()) {
+        updateWebview();
+      }
+    });
+
     updateWebview();
+  }
+
+  private handleMessage(message: any) {
+    if (message.type === "error") {
+      vscode.window
+        .showErrorMessage(message.text, "Reload", "Dismiss")
+        .then((action) => {
+          if (action === "Reload") {
+            vscode.commands.executeCommand("workbench.action.reloadWindow");
+          }
+        });
+    }
   }
 
   private getHtmlForWebview(webview: vscode.Webview): string {
