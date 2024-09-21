@@ -11,7 +11,7 @@ type Props = {
 function BareDataRow({ rowIndex, headers, rowData }: Props) {
   return (
     <tr key={rowIndex}>
-      <IndexCell index={rowIndex + 1} />
+      <IndexCell index={rowIndex} />
       {headers.map((header) => (
         <DataCell
           key={`${header}_${rowIndex}`}

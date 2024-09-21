@@ -16,3 +16,7 @@ export const updateCellContent = (
 export const addRow = () => {
   postMessageToVSCode({ type: "add" });
 };
+
+export const deleteRow = (rowIndex: number) => {
+  postMessageToVSCode({ type: "delete", rowIndex });
+};
