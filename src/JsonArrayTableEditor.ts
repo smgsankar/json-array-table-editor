@@ -140,7 +140,7 @@ export class JsonArrayTableEditor implements vscode.CustomTextEditorProvider {
   private getHtmlForWebview(webview: vscode.Webview): string {
     // for production
     const scriptSrc = webview.asWebviewUri(
-      vscode.Uri.joinPath(this.context.extensionUri, "src", "main.js")
+      vscode.Uri.joinPath(this.context.extensionUri, "src", "webview", "dist", "main.js")
     );
 
     // for development

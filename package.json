@@ -43,7 +43,7 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "yarn run compile && yarn run lint",
-    "precompile": "cd webview && yarn install && yarn run build",
+    "precompile": "cd src/webview && yarn install && yarn run build",
     "lint": "eslint src",
     "test": "vscode-test"
   },
