@@ -6,6 +6,8 @@ import { parseJSON } from "./utils/helpers";
 export function App() {
   const [state, dispatch] = useReducer(dataReducer, initialState);
   const messageHandler = (event: MessageEvent) => {
+    console.log("received message ==> ", event.data);
+
     const { type, ...rest } = event.data;
     switch (type) {
       case "init":
@@ -19,6 +21,8 @@ export function App() {
         console.log("Unknown message type: ", type);
     }
   };
+
+  console.log("state ==> ", state);
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {

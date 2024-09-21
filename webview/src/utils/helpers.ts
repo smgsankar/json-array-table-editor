@@ -7,15 +7,18 @@ const fallbackJSONData = {
   data: [],
 };
 
-export const parseJSON = (rawData: string) => {
-  if (!rawData) {
-    return fallbackJSONData;
-  }
+export const parseJSON = (data: any) => {
+  console.log("incoming data ==> ", data);
   try {
-    const data = JSON.parse(rawData);
-    if (!Array.isArray(data)) {
+    if (
+      !Array.isArray(data) ||
+      typeof data[0] !== "object" ||
+      !Object.keys(data[0]).length
+    ) {
       // since the custom editor only supports array data
-      throw new Error("Parsed JSON Data is not an array");
+      throw new Error(
+        "Invalid data type, the extension only supports array of JSON objects"
+      );
     }
     const headers = Object.keys(data[0]);
     data.some((row) => {
@@ -31,6 +34,7 @@ export const parseJSON = (rawData: string) => {
     });
     return { headers, data };
   } catch (e) {
+    console.log("Error parsing JSON data ==> ", data, (e as Error).message);
     postMessageToVSCode({ type: "error", text: (e as Error).message });
     return fallbackJSONData;
   }

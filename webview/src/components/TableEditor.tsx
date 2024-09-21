@@ -1,3 +1,5 @@
+import { DataRow } from "./DataRow";
+import { TableHeader } from "./TableHeader";
 import "./table.css";
 
 type Props = {
@@ -7,23 +9,20 @@ type Props = {
 
 export function TableEditor({ data, headers }: Props) {
   return (
-    <table>
-      <thead>
-        <tr>
-          {headers.map((header) => (
-            <th key={header}>{header}</th>
+    <main>
+      <table>
+        <TableHeader headers={headers} />
+        <tbody>
+          {data.map((row, index) => (
+            <DataRow
+              key={index}
+              rowData={row}
+              rowIndex={index}
+              headers={headers}
+            />
           ))}
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((row, index) => (
-          <tr key={index}>
-            {headers.map((header) => (
-              <td key={header}>{row[header]}</td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </main>
   );
 }

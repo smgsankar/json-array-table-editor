@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 
 export class JsonArrayTableEditor implements vscode.CustomTextEditorProvider {
   public static readonly viewType = "jsonArrayTableEditor.jsonArrayTableEditor";
+  private parsedJSON: Record<string, string>[];
 
   public static register(context: vscode.ExtensionContext): vscode.Disposable {
     const provider = new JsonArrayTableEditor(context);
@@ -12,7 +13,9 @@ export class JsonArrayTableEditor implements vscode.CustomTextEditorProvider {
     return providerRegistration;
   }
 
-  constructor(private readonly context: vscode.ExtensionContext) {}
+  constructor(private readonly context: vscode.ExtensionContext) {
+    this.parsedJSON = [];
+  }
 
   public async resolveCustomTextEditor(
     document: vscode.TextDocument,
@@ -26,17 +29,20 @@ export class JsonArrayTableEditor implements vscode.CustomTextEditorProvider {
     webviewPanel.webview.html = this.getHtmlForWebview(webviewPanel.webview);
 
     webviewPanel.webview.onDidReceiveMessage(
-      this.handleMessage,
+      (message) => this.handleMessage(document, message),
       undefined,
       this.context.subscriptions
     );
 
-    function updateWebview() {
+    const updateWebview = () => {
+      const json = document.getText();
+      const parsed = JSON.parse(json);
+      this.parsedJSON = JSON.parse(document.getText());
       webviewPanel.webview.postMessage({
         type: "init",
-        text: document.getText(),
+        text: parsed,
       });
-    }
+    };
 
     vscode.workspace.onDidChangeTextDocument((e) => {
       if (e.document.uri.toString() === document.uri.toString()) {
@@ -44,18 +50,55 @@ export class JsonArrayTableEditor implements vscode.CustomTextEditorProvider {
       }
     });
 
+    vscode.workspace.onDidSaveTextDocument((e) => {
+      if (e.uri.toString() === document.uri.toString()) {
+        updateWebview();
+      }
+    });
+
+    webviewPanel.onDidChangeViewState((e) => {
+      if (e.webviewPanel.visible) {
+        updateWebview();
+      }
+    });
+
     updateWebview();
   }
 
-  private handleMessage(message: any) {
-    if (message.type === "error") {
-      vscode.window
-        .showErrorMessage(message.text, "Reload", "Dismiss")
-        .then((action) => {
-          if (action === "Reload") {
-            vscode.commands.executeCommand("workbench.action.reloadWindow");
-          }
-        });
+  private handleMessage(document: vscode.TextDocument, message: any) {
+    switch (message.type) {
+      case "error":
+        vscode.window
+          .showErrorMessage(message.text, "Reload", "Dismiss")
+          .then((action) => {
+            if (action === "Reload") {
+              vscode.commands.executeCommand("workbench.action.reloadWindow");
+            }
+          });
+        break;
+      case "update":
+        const edit = new vscode.WorkspaceEdit();
+        const { rowIndex, header, value } = message;
+        this.parsedJSON = [
+          ...this.parsedJSON.slice(0, rowIndex),
+          {
+            ...this.parsedJSON[rowIndex],
+            [header]: value,
+          },
+          ...this.parsedJSON.slice(rowIndex + 1),
+        ];
+        const json = JSON.stringify(this.parsedJSON, null, 2);
+        edit.replace(
+          document.uri,
+          new vscode.Range(
+            document.positionAt(0),
+            document.positionAt(document.getText().length)
+          ),
+          json
+        );
+        vscode.workspace.applyEdit(edit);
+        break;
+      default:
     }
   }
 
