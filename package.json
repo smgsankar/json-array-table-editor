@@ -2,14 +2,23 @@
   "name": "json-array-table-editor",
   "displayName": "JSON Array Table Editor",
   "description": "View and edit JSON arrays with Table UI",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "author": {
     "name": "smgsankar",
     "email": "gomzsankar@gmail.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/smgsankar/json-array-table-editor"
+  },
   "engines": {
     "vscode": "^1.93.0"
   },
+  "keywords": [
+    "json",
+    "table",
+    "editor"
+  ],
   "categories": [
     "Other"
   ],
@@ -34,7 +43,7 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "yarn run compile && yarn run lint",
-    "precompile": "cd webview && yarn install && yarn run build && cp -r dist ../src/webview",
+    "precompile": "cd webview && yarn install && yarn run build",
     "lint": "eslint src",
     "test": "vscode-test"
   },
