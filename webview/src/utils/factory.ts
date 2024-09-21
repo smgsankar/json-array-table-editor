@@ -12,3 +12,7 @@ export const updateCellContent = (
 ) => {
   postMessageToVSCode({ type: "update", rowIndex, header, value });
 };
+
+export const addRow = () => {
+  postMessageToVSCode({ type: "add" });
+};

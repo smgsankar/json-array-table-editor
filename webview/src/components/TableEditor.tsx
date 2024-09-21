@@ -1,3 +1,4 @@
+import { addRow } from "../utils/factory";
 import { DataRow } from "./DataRow";
 import { TableHeader } from "./TableHeader";
 import "./table.css";
@@ -23,6 +24,9 @@ export function TableEditor({ data, headers }: Props) {
           ))}
         </tbody>
       </table>
+      <button type="button" onClick={addRow}>
+        Add Row
+      </button>
     </main>
   );
 }

@@ -98,6 +98,23 @@ export class JsonArrayTableEditor implements vscode.CustomTextEditorProvider {
         );
         vscode.workspace.applyEdit(edit);
         break;
+      case "add":
+        const addEdit = new vscode.WorkspaceEdit();
+        const emptyRow = Object.fromEntries(
+          Object.keys(this.parsedJSON[0]).map((key) => [key, ""])
+        );
+        this.parsedJSON = [...this.parsedJSON, emptyRow];
+        const addJson = JSON.stringify(this.parsedJSON, null, 2);
+        addEdit.replace(
+          document.uri,
+          new vscode.Range(
+            document.positionAt(0),
+            document.positionAt(document.getText().length)
+          ),
+          addJson
+        );
+        vscode.workspace.applyEdit(addEdit);
+        break;
       default:
     }
   }

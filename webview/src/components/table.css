@@ -1,5 +1,11 @@
 main {
-  max-width: 300vw;
+  width: 200vw;
+  overflow: auto;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
 }
 
 * {
@@ -61,6 +67,7 @@ textarea:active {
   font: inherit;
   color: inherit;
   scrollbar-width: none;
+  resize: none;
 }
 
 textarea::-webkit-scrollbar {
