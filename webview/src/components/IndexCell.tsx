@@ -13,7 +13,6 @@ export function IndexCell({ index }: Props) {
   };
 
   const onKeyDown = (e: KeyboardEvent<HTMLTableCellElement>) => {
-    e.preventDefault();
     if (e.key === "Delete") {
       deleteRow(index);
     }
