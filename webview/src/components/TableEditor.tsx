@@ -1,14 +1,16 @@
 import { addRow } from "../utils/factory";
-import { DataRow } from "./DataRow";
+import { getForceUpdateHeader } from "../utils/helpers";
 import { TableHeader } from "./TableHeader";
+import { DataState } from "../utils/store";
+import { DataRow } from "./DataRow";
 import "./table.css";
 
 type Props = {
-  data: Record<string, string>[];
-  headers: string[];
+  state: DataState;
 };
 
-export function TableEditor({ data, headers }: Props) {
+export function TableEditor({ state }: Props) {
+  const { headers, data, forceUpdate } = state;
   return (
     <main>
       <table>
@@ -20,6 +22,7 @@ export function TableEditor({ data, headers }: Props) {
               rowData={row}
               rowIndex={index}
               headers={headers}
+              forceUpdateHeader={getForceUpdateHeader(index, forceUpdate)}
             />
           ))}
         </tbody>

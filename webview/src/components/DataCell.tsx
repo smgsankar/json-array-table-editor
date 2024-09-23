@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, memo } from "react";
+import { useRef, useEffect, memo } from "react";
 import { updateCellContent } from "../utils/factory";
 import throttle from "lodash.throttle";
 
@@ -6,9 +6,10 @@ type Props = {
   datum: string;
   header: string;
   rowIndex: number;
+  forceUpdate: boolean;
 };
 
-function BareDataCell({ datum, header, rowIndex }: Props) {
+function BareDataCell({ datum, header, rowIndex, forceUpdate }: Props) {
   const ref = useRef<HTMLTextAreaElement>(null);
 
   const updateContentToDocument = (value: string) => {
@@ -16,7 +17,7 @@ function BareDataCell({ datum, header, rowIndex }: Props) {
   };
 
   const throttledUpdate = useRef(
-    throttle(updateContentToDocument, 1000)
+    throttle(updateContentToDocument, 200)
   ).current;
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -25,7 +26,11 @@ function BareDataCell({ datum, header, rowIndex }: Props) {
   };
 
   useEffect(() => {
-    if (!ref.current || document.activeElement === ref.current) return;
+    if (
+      !ref.current ||
+      (!forceUpdate && document.activeElement === ref.current)
+    )
+      return;
     ref.current.value = datum;
   }, [datum]);
 

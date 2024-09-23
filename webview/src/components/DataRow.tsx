@@ -5,16 +5,18 @@ import { IndexCell } from "./IndexCell";
 type Props = {
   rowIndex: number;
   headers: string[];
+  forceUpdateHeader?: string;
   rowData: Record<string, string>;
 };
 
-function BareDataRow({ rowIndex, headers, rowData }: Props) {
+function BareDataRow({ rowIndex, headers, rowData, forceUpdateHeader }: Props) {
   return (
     <tr key={rowIndex}>
       <IndexCell index={rowIndex} />
       {headers.map((header) => (
         <DataCell
           key={`${header}_${rowIndex}`}
+          forceUpdate={forceUpdateHeader === header}
           datum={rowData[header]}
           rowIndex={rowIndex}
           header={header}

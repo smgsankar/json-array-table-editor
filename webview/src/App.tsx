@@ -14,8 +14,9 @@ export function App() {
         const parsedJSON = parseJSON(rest.text);
         dispatch({ type, payload: parsedJSON });
         break;
-      case "update":
-        console.log("event.data.text ==> ", rest.text);
+      case "revert":
+        const parsedJSONRevert = parseJSON(rest.text);
+        dispatch({ type, payload: parsedJSONRevert });
         break;
       default:
         console.log("Unknown message type: ", type);
@@ -34,5 +35,5 @@ export function App() {
     };
   }, []);
 
-  return <TableEditor data={state.data} headers={state.headers} />;
+  return <TableEditor state={state} />;
 }

@@ -1,4 +1,5 @@
 import { postMessageToVSCode } from "./factory";
+import { Data, DiffIndex } from "./store";
 
 const INCONSISTENT_COLUMNS = "Array of JSON Data has inconsistent keys";
 
@@ -37,5 +38,40 @@ export const parseJSON = (data: any) => {
     console.log("Error parsing JSON data ==> ", data, (e as Error).message);
     postMessageToVSCode({ type: "error", text: (e as Error).message });
     return fallbackJSONData;
+  }
+};
+
+export const findDiffIndex = (
+  oldData: Data,
+  newData: Data
+): DiffIndex | undefined => {
+  if (oldData.length !== newData.length) {
+    return;
+  }
+  for (let i = 0; i < oldData.length; i++) {
+    if (JSON.stringify(oldData[i]) !== JSON.stringify(newData[i])) {
+      const diff = Object.keys(oldData[i]).find(
+        (key) => oldData[i][key] !== newData[i][key]
+      );
+      if (!diff) {
+        return;
+      }
+      return {
+        index: i,
+        header: diff,
+      };
+    }
+  }
+};
+
+export const getForceUpdateHeader = (
+  rowIndex: number,
+  forceUpdate?: DiffIndex
+) => {
+  if (!forceUpdate) {
+    return;
+  }
+  if (forceUpdate.index === rowIndex) {
+    return forceUpdate.header;
   }
 };

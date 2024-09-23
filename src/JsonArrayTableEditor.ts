@@ -34,23 +34,29 @@ export class JsonArrayTableEditor implements vscode.CustomTextEditorProvider {
       this.context.subscriptions
     );
 
-    const updateWebview = () => {
+    const updateWebview = (reason?: vscode.TextDocumentChangeReason) => {
       const json = document.getText();
       const parsed = JSON.parse(json);
       this.parsedJSON = JSON.parse(document.getText());
+      if (!reason) {
+        webviewPanel.webview.postMessage({
+          type: "init",
+          text: parsed,
+        });
+      }
       webviewPanel.webview.postMessage({
-        type: "init",
+        type: "revert",
         text: parsed,
       });
     };
 
-    vscode.workspace.onDidChangeTextDocument((e) => {
+    const changeSub = vscode.workspace.onDidChangeTextDocument((e) => {
       if (e.document.uri.toString() === document.uri.toString()) {
-        updateWebview();
+        updateWebview(e.reason);
       }
     });
 
-    vscode.workspace.onDidSaveTextDocument((e) => {
+    const saveSub = vscode.workspace.onDidSaveTextDocument((e) => {
       if (e.uri.toString() === document.uri.toString()) {
         updateWebview();
       }
@@ -60,6 +66,11 @@ export class JsonArrayTableEditor implements vscode.CustomTextEditorProvider {
       if (e.webviewPanel.visible) {
         updateWebview();
       }
+    });
+
+    webviewPanel.onDidDispose(() => {
+      changeSub.dispose();
+      saveSub.dispose();
     });
 
     updateWebview();
@@ -140,11 +151,7 @@ export class JsonArrayTableEditor implements vscode.CustomTextEditorProvider {
   private getHtmlForWebview(webview: vscode.Webview): string {
     // for production
     const scriptSrc = webview.asWebviewUri(
-      vscode.Uri.joinPath(
-        this.context.extensionUri,
-        "scripts",
-        "main.js"
-      )
+      vscode.Uri.joinPath(this.context.extensionUri, "scripts", "main.js")
     );
 
     // for development
