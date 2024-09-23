@@ -1,4 +1,4 @@
-import { type MouseEvent, type KeyboardEvent, useRef } from "react";
+import { type KeyboardEvent, useRef } from "react";
 import { deleteRow } from "../utils/factory";
 
 type Props = {
