@@ -13,7 +13,7 @@ export function IndexCell({ index }: Props) {
   };
 
   const onKeyDown = (e: KeyboardEvent<HTMLTableCellElement>) => {
-    if (e.key === "Delete") {
+    if (e.key === "Delete" || e.key === "Backspace") {
       deleteRow(index);
     }
   };
