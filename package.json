@@ -11,6 +11,7 @@
     "type": "git",
     "url": "https://github.com/smgsankar/json-array-table-editor"
   },
+  "license": "MIT",
   "engines": {
     "vscode": "^1.93.0"
   },
