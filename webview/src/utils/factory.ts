@@ -14,9 +14,13 @@ export const updateCellContent = (
 };
 
 export const addRow = () => {
-  postMessageToVSCode({ type: "add" });
+  postMessageToVSCode({ type: "addRow" });
+};
+
+export const addColumn = (columnName: string, defaultValue: string) => {
+  postMessageToVSCode({ type: "addColumn", columnName, defaultValue });
 };
 
 export const deleteRow = (rowIndex: number) => {
-  postMessageToVSCode({ type: "delete", rowIndex });
+  postMessageToVSCode({ type: "deleteRow", rowIndex });
 };

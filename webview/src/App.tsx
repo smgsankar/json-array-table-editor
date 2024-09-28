@@ -1,7 +1,9 @@
 import { useEffect, useReducer } from "react";
 import { dataReducer, initialState } from "./utils/store";
+import { AddColumnForm } from "./components/AddColumnForm";
 import { TableEditor } from "./components/TableEditor";
 import { parseJSON } from "./utils/helpers";
+import "./components/table.css";
 
 export function App() {
   const [state, dispatch] = useReducer(dataReducer, initialState);
@@ -35,5 +37,10 @@ export function App() {
     };
   }, []);
 
-  return <TableEditor state={state} />;
+  return (
+    <main>
+      <TableEditor state={state} />
+      <AddColumnForm />
+    </main>
+  );
 }

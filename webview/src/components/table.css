@@ -3,9 +3,27 @@ main {
   overflow: auto;
   margin-bottom: 24px;
   display: flex;
+  gap: 16px;
+}
+
+.dataTable {
+  display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 16px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.formItem {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 * {

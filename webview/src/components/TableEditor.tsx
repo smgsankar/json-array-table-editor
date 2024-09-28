@@ -3,7 +3,6 @@ import { getForceUpdateHeader } from "../utils/helpers";
 import { TableHeader } from "./TableHeader";
 import { DataState } from "../utils/store";
 import { DataRow } from "./DataRow";
-import "./table.css";
 
 type Props = {
   state: DataState;
@@ -12,7 +11,7 @@ type Props = {
 export function TableEditor({ state }: Props) {
   const { headers, data, forceUpdate } = state;
   return (
-    <main>
+    <section className="dataTable">
       <table>
         <TableHeader headers={headers} />
         <tbody>
@@ -30,6 +29,6 @@ export function TableEditor({ state }: Props) {
       <button type="button" onClick={addRow}>
         Add Row
       </button>
-    </main>
+    </section>
   );
 }

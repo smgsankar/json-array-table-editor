@@ -109,7 +109,7 @@ export class JsonArrayTableEditor implements vscode.CustomTextEditorProvider {
         );
         vscode.workspace.applyEdit(edit);
         break;
-      case "add":
+      case "addRow":
         const addEdit = new vscode.WorkspaceEdit();
         const emptyRow = Object.fromEntries(
           Object.keys(this.parsedJSON[0]).map((key) => [key, ""])
@@ -126,7 +126,7 @@ export class JsonArrayTableEditor implements vscode.CustomTextEditorProvider {
         );
         vscode.workspace.applyEdit(addEdit);
         break;
-      case "delete":
+      case "deleteRow":
         const deleteEdit = new vscode.WorkspaceEdit();
         const { rowIndex: deleteIndex } = message;
         this.parsedJSON = [
@@ -144,7 +144,26 @@ export class JsonArrayTableEditor implements vscode.CustomTextEditorProvider {
         );
         vscode.workspace.applyEdit(deleteEdit);
         break;
+      case "addColumn":
+        const addColumnEdit = new vscode.WorkspaceEdit();
+        const { columnName, defaultValue } = message;
+        this.parsedJSON = this.parsedJSON.map((row) => ({
+          ...row,
+          [columnName]: defaultValue ?? "",
+        }));
+        const addColumnJson = JSON.stringify(this.parsedJSON, null, 2);
+        addColumnEdit.replace(
+          document.uri,
+          new vscode.Range(
+            document.positionAt(0),
+            document.positionAt(document.getText().length)
+          ),
+          addColumnJson
+        );
+        vscode.workspace.applyEdit(addColumnEdit);
+        break;
       default:
+        console.log("Unknown message type: ", message);
     }
   }
 
