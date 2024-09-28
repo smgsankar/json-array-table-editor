@@ -24,3 +24,7 @@ export const addColumn = (columnName: string, defaultValue: string) => {
 export const deleteRow = (rowIndex: number) => {
   postMessageToVSCode({ type: "deleteRow", rowIndex });
 };
+
+export const deleteColumn = (columnName: string) => {
+  postMessageToVSCode({ type: "deleteColumn", columnName });
+};

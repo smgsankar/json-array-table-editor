@@ -162,6 +162,24 @@ export class JsonArrayTableEditor implements vscode.CustomTextEditorProvider {
         );
         vscode.workspace.applyEdit(addColumnEdit);
         break;
+      case "deleteColumn":
+        const deleteColumnEdit = new vscode.WorkspaceEdit();
+        const { columnName: deleteColumnName } = message;
+        this.parsedJSON = this.parsedJSON.map((row) => {
+          const { [deleteColumnName]: _, ...rest } = row;
+          return rest;
+        });
+        const deleteColumnJson = JSON.stringify(this.parsedJSON, null, 2);
+        deleteColumnEdit.replace(
+          document.uri,
+          new vscode.Range(
+            document.positionAt(0),
+            document.positionAt(document.getText().length)
+          ),
+          deleteColumnJson
+        );
+        vscode.workspace.applyEdit(deleteColumnEdit);
+        break;
       default:
         console.log("Unknown message type: ", message);
     }
