@@ -13,12 +13,11 @@ This extension is built based on a requirement to view/modify JSON files contain
 The extension would work with JSON files of format `*.d.json`
 The JSON file must contain only an array of JSON Objects of consistent structure
 
+## Example
+
+https://github.com/user-attachments/assets/900c3ab6-67dd-4a91-899d-0d68ab61733d
+
+
 ## Issues & Reporting
 
 If you happen to encounter any issue/bug within the extension, report them [here](https://github.com/smgsankar/json-array-table-editor/issues)
-
-## Release Notes
-
-### 1.0.0
-
-Initial release of the `jsonArrayTableEditor` extension
